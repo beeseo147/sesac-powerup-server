@@ -1,8 +1,10 @@
 #pragma once
 
+#include "../../../ProudNet/include/ProudNetCommon.h"
 #include "../../Common/Vars.h"
 #include <stdint.h>
 
+using namespace Proud;
 using namespace std;
 
 class Room

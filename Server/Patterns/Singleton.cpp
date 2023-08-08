@@ -3,6 +3,6 @@
 template<typename T>
 T& Singleton<T>::instance()
 {
-    static T instance{token{}};
+    static T instance{};
     return instance;
 }

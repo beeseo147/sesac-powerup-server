@@ -1,7 +1,5 @@
 #pragma once
 #include "../../ProudNet/include/ProudNetCommon.h"
-#include "Powerup_stub.h"
-#include "Powerup_proxy.h"
 #include "stdafx.h"
 #include <new>
 

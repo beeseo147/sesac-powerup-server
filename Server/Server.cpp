@@ -1,6 +1,7 @@
 ﻿#include "Server.h"
-#include <stdint.h>
-#include <stdlib.h>
+#include "../Common/Powerup_common.cpp"
+#include "../Common/Powerup_proxy.cpp"
+#include "../Common/Powerup_stub.cpp"
 
 // Client-to-server RMI stub
 PowerupC2S::StubFunctional g_GameStub;

@@ -2,8 +2,10 @@
 
 #include "stdafx.h"
 #include "Manage\MatchMaker.h"
+#include "Manage\MatchMaker.cpp"
 
 #include "../../ProudNet/include/ProudNetServer.h"
+
 #include "../Common/Vars.h"
 
 using namespace std;

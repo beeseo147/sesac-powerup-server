@@ -1,7 +1,9 @@
 #pragma once
 
 #include "../Patterns/Singleton.h"
+#include "../Patterns/Singleton.cpp"
 #include "Room.h"
+#include "Room.cpp"
 #include <map>
 #include <set>
 

@@ -1,3 +1,6 @@
+#ifndef _POWERUP_MARSHALER_CPP_
+#define _POWERUP_MARSHALER_CPP_
+
 #include "../../ProudNet/include/ProudNetCommon.h"
 #include <stdint.h>
 #include <vcruntime.h>
@@ -129,3 +132,5 @@ namespace Proud {
 		s += L"<vector<int32_t>>";
 	}
 }
+
+#endif
