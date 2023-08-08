@@ -1,0 +1,59 @@
+// using(cs) System.Collections.Generic;
+// #include <set>
+// #include <unordered_set>
+// #include <unordered_map>
+
+// #include <vector>
+// #include <map>
+// #include "../../ProudNet/include/ProudNetCommon.h"
+// #include "Powerup_marshaler.cpp"
+
+// rename cs(std::vector<T>, List<T>);
+// rename cs(std::list<T>, LinkedList<T>);
+// rename cs(std::stack<T>, Stack<T>);
+// rename cs(std::queue<T>, Queue<T>);
+// rename cs(std::priority_queue<T>, PriorityQueue<T>);
+// rename cs(std::set<T>, SortedSet<T>);
+// rename cs(std::unordered_set<T>, HashSet<T>);
+// rename cs(std::map<K, V>, SortedDictionary<K, V>);
+// rename cs(std::unordered_map<K, V>, Dictionary<K, V>);
+rename cs(Proud::String, System.String);
+rename cs(int8_t, sbyte);
+rename cs(uint8_t, byte);
+rename cs(int16_t, short);
+rename cs(uint16_t, ushort);
+rename cs(int32_t, int);
+rename cs(uint32_t, uint);
+rename cs(int64_t, long);
+rename cs(uint64_t, ulong);
+rename cs(wchar_t, char);
+rename cs(std::map<int32_t, bool>, SortedDictionary<int, bool>);
+
+// MEMO Random seed는 사용하지 않는다.
+
+global PowerupS2G 2000
+{
+	GameStart();
+	GameEnd();
+	PlayersReady([in] std::map<int32_t, bool> playersReady);
+	TimeNow([in] int64_t ticksRemain);
+	PlayerMove([in] int32_t playerNo, [in] int32_t key, [in] std::vector<int32_t> enemies);
+	PlayersRank([in] std::map<int32_t, int32_t> playersRank);
+}
+
+global PowerupS2C 2100
+{
+	PlayerEnter([in] bool isEntered);
+	PlayerExit([in] bool isExited);
+	//TODO PlayerListRoom([in] std::vector<Room> rooms);
+}
+
+global PowerupC2S 2200
+{
+	EnterRoom();
+	ExitRoom();
+	GetReady([in] bool isReady);
+	//TODO ListRoom();
+	Move([in] int32_t key, [in] std::vector<int32_t> enemies);
+	HasPoint([in] int32_t point);
+}
