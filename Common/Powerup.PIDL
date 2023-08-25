@@ -20,7 +20,7 @@
 rename cs(Proud::String, System.String);
 rename cs(std::map<int32_t,bool>, SortedDictionary<int,bool>);
 rename cs(std::map<int32_t,int32_t>, SortedDictionary<int,int>);
-rename cs(std::vector<int32_t>, SortedDictionary<int>);
+rename cs(std::vector<int32_t>, List<int>);
 rename cs(int8_t, sbyte);
 rename cs(uint8_t, byte);
 rename cs(int16_t, short);
