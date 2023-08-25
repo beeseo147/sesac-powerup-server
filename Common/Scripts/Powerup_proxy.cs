@@ -145,7 +145,7 @@ Nettention.Proud.Marshaler.Write(__msg, ticksRemain);
 		RmiName_TimeNow, Common.TimeNow);
         }
 }
-public bool PlayerMove(Nettention.Proud.HostID remote,Nettention.Proud.RmiContext rmiContext, int playerNo, int key, List<int> enemies)
+public bool PlayerMove(Nettention.Proud.HostID remote,Nettention.Proud.RmiContext rmiContext, int playerNo, int key, SortedDictionary<int> enemies)
 {
 	using (Nettention.Proud.FreeListPopper<Nettention.Proud.Message> freeList = new Nettention.Proud.FreeListPopper<Nettention.Proud.Message>())
 		{
@@ -166,7 +166,7 @@ public bool PlayerMove(Nettention.Proud.HostID remote,Nettention.Proud.RmiContex
         }
 }
 
-public bool PlayerMove(Nettention.Proud.HostID[] remotes,Nettention.Proud.RmiContext rmiContext, int playerNo, int key, List<int> enemies)
+public bool PlayerMove(Nettention.Proud.HostID[] remotes,Nettention.Proud.RmiContext rmiContext, int playerNo, int key, SortedDictionary<int> enemies)
 {
 	using (Nettention.Proud.FreeListPopper<Nettention.Proud.Message> freeList = new Nettention.Proud.FreeListPopper<Nettention.Proud.Message>())
 {
@@ -439,7 +439,7 @@ Nettention.Proud.Marshaler.Write(__msg, isReady);
 		RmiName_GetReady, Common.GetReady);
         }
 }
-public bool Move(Nettention.Proud.HostID remote,Nettention.Proud.RmiContext rmiContext, int key, List<int> enemies)
+public bool Move(Nettention.Proud.HostID remote,Nettention.Proud.RmiContext rmiContext, int key, SortedDictionary<int> enemies)
 {
 	using (Nettention.Proud.FreeListPopper<Nettention.Proud.Message> freeList = new Nettention.Proud.FreeListPopper<Nettention.Proud.Message>())
 		{
@@ -459,7 +459,7 @@ public bool Move(Nettention.Proud.HostID remote,Nettention.Proud.RmiContext rmiC
         }
 }
 
-public bool Move(Nettention.Proud.HostID[] remotes,Nettention.Proud.RmiContext rmiContext, int key, List<int> enemies)
+public bool Move(Nettention.Proud.HostID[] remotes,Nettention.Proud.RmiContext rmiContext, int key, SortedDictionary<int> enemies)
 {
 	using (Nettention.Proud.FreeListPopper<Nettention.Proud.Message> freeList = new Nettention.Proud.FreeListPopper<Nettention.Proud.Message>())
 {

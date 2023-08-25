@@ -36,8 +36,8 @@ public BeforeRmiInvocationDelegate BeforeRmiInvocation = delegate(Nettention.Pro
 		{ 
 			return false;
 		};
-		public delegate bool PlayerMoveDelegate(Nettention.Proud.HostID remote,Nettention.Proud.RmiContext rmiContext, int playerNo, int key, List<int> enemies);  
-		public PlayerMoveDelegate PlayerMove = delegate(Nettention.Proud.HostID remote,Nettention.Proud.RmiContext rmiContext, int playerNo, int key, List<int> enemies)
+		public delegate bool PlayerMoveDelegate(Nettention.Proud.HostID remote,Nettention.Proud.RmiContext rmiContext, int playerNo, int key, SortedDictionary<int> enemies);  
+		public PlayerMoveDelegate PlayerMove = delegate(Nettention.Proud.HostID remote,Nettention.Proud.RmiContext rmiContext, int playerNo, int key, SortedDictionary<int> enemies)
 		{ 
 			return false;
 		};
@@ -297,7 +297,7 @@ core.PostCheckReadMessage(__msg, RmiName_TimeNow);
 
         int playerNo; Nettention.Proud.Marshaler.Read(__msg,out playerNo);	
 int key; Nettention.Proud.Marshaler.Read(__msg,out key);	
-List<int> enemies; Nettention.Proud.Marshaler.Read(__msg,out enemies);	
+SortedDictionary<int> enemies; Nettention.Proud.Marshaler.Read(__msg,out enemies);	
 core.PostCheckReadMessage(__msg, RmiName_PlayerMove);
         if(enableNotifyCallFromStub==true)
         {
@@ -609,8 +609,8 @@ public BeforeRmiInvocationDelegate BeforeRmiInvocation = delegate(Nettention.Pro
 		{ 
 			return false;
 		};
-		public delegate bool MoveDelegate(Nettention.Proud.HostID remote,Nettention.Proud.RmiContext rmiContext, int key, List<int> enemies);  
-		public MoveDelegate Move = delegate(Nettention.Proud.HostID remote,Nettention.Proud.RmiContext rmiContext, int key, List<int> enemies)
+		public delegate bool MoveDelegate(Nettention.Proud.HostID remote,Nettention.Proud.RmiContext rmiContext, int key, SortedDictionary<int> enemies);  
+		public MoveDelegate Move = delegate(Nettention.Proud.HostID remote,Nettention.Proud.RmiContext rmiContext, int key, SortedDictionary<int> enemies)
 		{ 
 			return false;
 		};
@@ -816,7 +816,7 @@ core.PostCheckReadMessage(__msg, RmiName_GetReady);
         ctx.compressMode = pa.CompressMode;
 
         int key; Nettention.Proud.Marshaler.Read(__msg,out key);	
-List<int> enemies; Nettention.Proud.Marshaler.Read(__msg,out enemies);	
+SortedDictionary<int> enemies; Nettention.Proud.Marshaler.Read(__msg,out enemies);	
 core.PostCheckReadMessage(__msg, RmiName_Move);
         if(enableNotifyCallFromStub==true)
         {
