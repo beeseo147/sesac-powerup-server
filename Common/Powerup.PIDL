@@ -18,6 +18,9 @@
 // rename cs(std::map<K, V>, SortedDictionary<K, V>);
 // rename cs(std::unordered_map<K, V>, Dictionary<K, V>);
 rename cs(Proud::String, System.String);
+rename cs(std::map<int32_t, bool>, SortedDictionary<int, bool>);
+rename cs(std::map<int32_t, int32_t>, SortedDictionary<int, int>);
+rename cs(std::vector<int32_t>, List<int>);
 rename cs(int8_t, sbyte);
 rename cs(uint8_t, byte);
 rename cs(int16_t, short);
@@ -27,7 +30,6 @@ rename cs(uint32_t, uint);
 rename cs(int64_t, long);
 rename cs(uint64_t, ulong);
 rename cs(wchar_t, char);
-rename cs(std::map<int32_t, bool>, SortedDictionary<int, bool>);
 
 // MEMO Random seed는 사용하지 않는다.
 
