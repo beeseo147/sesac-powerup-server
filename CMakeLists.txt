@@ -11,3 +11,4 @@ project ("sesac-powerup-server")
 # 하위 프로젝트
 add_subdirectory ("Common")
 add_subdirectory ("Server")
+add_subdirectory ("TestClient")

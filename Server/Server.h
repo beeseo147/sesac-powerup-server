@@ -1,8 +1,9 @@
 #pragma once
 
-#include "stdafx.h"
-#include "Manage\MatchMaker.h"
 #include "Manage\MatchMaker.cpp"
+#include "Manage\MatchMaker.h"
+#include "stdafx.h"
+
 
 #include "../../ProudNet/include/ProudNetServer.h"
 
@@ -11,4 +12,4 @@
 using namespace std;
 using namespace Proud;
 
-bool start_game_thread(HostID groupID, Room& room);
+bool start_game_thread(HostID groupID, Room &room);

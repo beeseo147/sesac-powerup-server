@@ -1,15 +1,10 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
-template<typename T>
-class Singleton {
+template <typename T> class Singleton {
 public:
-    static T& instance();
-
-    Singleton(const Singleton&) = delete;
-    Singleton& operator= (const Singleton) = delete;
+  static T &instance();
 
 protected:
-    struct token {};
-    Singleton() {}
+  Singleton() {}
 };
 #endif // !SINGLETON_H
