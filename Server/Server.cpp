@@ -2,7 +2,11 @@
 #include "../Common/Powerup_common.cpp"
 #include "../Common/Powerup_proxy.cpp"
 #include "../Common/Powerup_stub.cpp"
+#include <chrono>
+#include <thread>
+#include <utility>
 
+CriticalSection g_critSec;
 // Client-to-server RMI stub
 PowerupC2S::StubFunctional g_GameStub;
 
@@ -16,6 +20,10 @@ PowerupS2C::Proxy g_GameProxyClient;
 // map<HostID, int> map_HostID_player;
 // map<int, Player> map_player_Player;
 // map<int, set<Item>> map_player_Items;
+// map<HostID, Proud::Thread *> map_groupID_thread;
+map<HostID, bool> map_groupID_on;
+vector<Thread *> games;
+queue<ThreadDAO> roomReadyInfo;
 
 int main(int argc, char *argv[]) {
   // 서버 인스턴스 생성
@@ -23,7 +31,11 @@ int main(int argc, char *argv[]) {
 
   // 클라이언트 이동 동작 이벤트 처리 함수
   g_GameStub.EnterRoom_Function = [&] PARAM_PowerupC2S_EnterRoom {
+    CriticalSectionLock lock(g_critSec, true);
     cout << "EnterRoom(): Start\n";
+    if (HostID_None != MatchMaker::find_room_joined(remote))
+      return true;
+
     HostID groupID = MatchMaker::find_room_available();
 
     if (groupID == HostID_None) {
@@ -45,8 +57,12 @@ int main(int argc, char *argv[]) {
 
   // 클라이언트 이동 동작 이벤트 처리 함수
   g_GameStub.ExitRoom_Function = [&] PARAM_PowerupC2S_ExitRoom {
+    CriticalSectionLock lock(g_critSec, true);
     cout << "ExitRoom(): Start\n";
     HostID groupID = MatchMaker::find_room_joined(remote);
+
+    if (groupID == HostID_None)
+      return true;
 
     MatchMaker::leave_room(remote, groupID);
     server->LeaveP2PGroup(remote, groupID);
@@ -55,8 +71,18 @@ int main(int argc, char *argv[]) {
 
     g_GameProxyClient.PlayerExit(remote, RmiContext::ReliableSend, true);
 
-    if (room.is_all_players_ready() && start_game_thread(groupID, room))
+    if (room.is_game_started() && room.get_players_rank().size() < 2) {
+      map_groupID_on[groupID] = false;
       return true;
+    }
+
+    if (room.is_all_players_ready()) {
+      ThreadDAO threadDAO;
+      threadDAO.groupID = groupID;
+      threadDAO.roomPtr = &room;
+
+      roomReadyInfo.push(threadDAO);
+    }
 
     g_GameProxyGroup.PlayersReady(groupID, RmiContext::ReliableSend,
                                   room.get_players_ready());
@@ -66,14 +92,23 @@ int main(int argc, char *argv[]) {
   };
 
   g_GameStub.GetReady_Function = [&] PARAM_PowerupC2S_GetReady {
+    CriticalSectionLock lock(g_critSec, true);
     cout << "GetReadyRoom(): Start\n";
     HostID groupID = MatchMaker::find_room_joined(remote);
+    if (HostID_None == groupID)
+      return true;
+
     Room &room = MatchMaker::get_room_joined(remote);
 
     room.set_player_ready(remote, isReady);
 
-    if (room.is_all_players_ready() && start_game_thread(groupID, room))
-      return true;
+    if (room.is_all_players_ready()) {
+      ThreadDAO threadDAO;
+      threadDAO.groupID = groupID;
+      threadDAO.roomPtr = &room;
+
+      roomReadyInfo.push(threadDAO);
+    }
 
     g_GameProxyGroup.PlayersReady(
         groupID, RmiContext::ReliableSend,
@@ -84,8 +119,12 @@ int main(int argc, char *argv[]) {
   };
 
   g_GameStub.HasPoint_Function = [&] PARAM_PowerupC2S_HasPoint {
+    CriticalSectionLock lock(g_critSec, true);
     cout << "HasPoint(): Start\n";
     HostID groupID = MatchMaker::find_room_joined(remote);
+    if (HostID_None == groupID)
+      return true;
+
     Room &room = MatchMaker::get_room_joined(remote);
 
     room.set_player_point(remote, point);
@@ -99,6 +138,7 @@ int main(int argc, char *argv[]) {
   };
 
   g_GameStub.Move_Function = [&] PARAM_PowerupC2S_Move {
+    CriticalSectionLock lock(g_critSec, true);
     cout << "Move(): Start\n";
     Room &room = MatchMaker::get_room_joined(remote);
 
@@ -113,6 +153,7 @@ int main(int argc, char *argv[]) {
   // set a routine which is executed when a client is joining.
   // clientInfo has the client player including its HostID.
   server->OnClientJoin = [&server](CNetClientInfo *clientInfo) {
+    CriticalSectionLock lock(g_critSec, true);
     cout << "Client " << clientInfo->m_HostID << " Joined\n";
   };
 
@@ -120,6 +161,7 @@ int main(int argc, char *argv[]) {
   server->OnClientLeave = [&server](CNetClientInfo *clientInfo,
                                     ErrorInfo *errorInfo,
                                     const ByteArray &comment) {
+    CriticalSectionLock lock(g_critSec, true);
     cout << "Client " << clientInfo->m_HostID << " Leaved\n";
   };
 
@@ -143,32 +185,39 @@ int main(int argc, char *argv[]) {
   }
 
   while (true) {
-    ;
+    if (roomReadyInfo.size()) {
+      ThreadDAO threadDAO = roomReadyInfo.front();
+      roomReadyInfo.pop();
+
+      Thread *workerThread = new Thread([&]() {
+        cout << "thread start\n";
+        int32_t time_remain = 60;
+
+        threadDAO.roomPtr->start_game();
+        g_GameProxyGroup.GameStart(threadDAO.groupID, RmiContext::ReliableSend);
+        map_groupID_on[threadDAO.groupID] = true;
+
+        while (map_groupID_on[threadDAO.groupID] && time_remain) {
+          Proud::Sleep(1000);
+
+          time_remain--;
+          g_GameProxyGroup.TimeNow(threadDAO.groupID, RmiContext::ReliableSend,
+                                   time_remain);
+        }
+
+        g_GameProxyGroup.GameEnd(threadDAO.groupID, RmiContext::ReliableSend);
+        threadDAO.roomPtr->reset();
+        cout << "thread end\n";
+      });
+
+      workerThread->Start();
+      games.push_back(workerThread);
+    }
+  }
+
+  for (auto thread : games) {
+    thread->Join();
   }
 
   return 0;
-}
-
-bool start_game_thread(HostID groupID, Room &room) {
-  if (room.is_all_players_ready()) {
-    room.start_game();
-    g_GameProxyGroup.GameStart(groupID, RmiContext::ReliableSend);
-
-    thread workerThread([&]() {
-      cout << "thread";
-      int32_t time_remain = 60;
-      while (time_remain) {
-        Proud::Sleep(1000);
-        time_remain--;
-        g_GameProxyGroup.TimeNow(groupID, RmiContext::ReliableSend,
-                                 time_remain);
-      }
-      g_GameProxyGroup.GameEnd(groupID, RmiContext::ReliableSend);
-      room.reset();
-    });
-    workerThread.join();
-    return true;
-  }
-
-  return false;
 }

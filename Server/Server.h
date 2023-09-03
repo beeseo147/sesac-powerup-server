@@ -4,7 +4,6 @@
 #include "Manage\MatchMaker.h"
 #include "stdafx.h"
 
-
 #include "../../ProudNet/include/ProudNetServer.h"
 
 #include "../Common/Vars.h"
@@ -12,4 +11,10 @@
 using namespace std;
 using namespace Proud;
 
-bool start_game_thread(HostID groupID, Room &room);
+// bool start_game_thread(HostID groupID, Room &room);
+
+class ThreadDAO {
+public:
+  HostID groupID;
+  Room *roomPtr;
+};

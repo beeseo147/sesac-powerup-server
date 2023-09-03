@@ -22,7 +22,7 @@ HostID MatchMaker::find_room_available() {
 
 HostID MatchMaker::find_room_joined(HostID hostID) {
   if (instance.m_HostGroupMap.find(hostID) == instance.m_HostGroupMap.end())
-    throw "Host is not in any room2";
+    return HostID_None;
   return instance.m_HostGroupMap[hostID];
 }
 
