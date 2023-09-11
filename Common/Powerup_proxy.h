@@ -55,8 +55,8 @@ namespace PowerupS2C {
 	class Proxy : public ::Proud::IRmiProxy
 	{
 	public:
-	virtual bool PlayerEnter ( ::Proud::HostID remote, ::Proud::RmiContext& rmiContext , const bool & isEntered) PN_SEALED; 
-	virtual bool PlayerEnter ( ::Proud::HostID *remotes, int remoteCount, ::Proud::RmiContext &rmiContext, const bool & isEntered)   PN_SEALED;  
+	virtual bool PlayerEnter ( ::Proud::HostID remote, ::Proud::RmiContext& rmiContext , const int & playerNo) PN_SEALED; 
+	virtual bool PlayerEnter ( ::Proud::HostID *remotes, int remoteCount, ::Proud::RmiContext &rmiContext, const int & playerNo)   PN_SEALED;  
 	virtual bool PlayerExit ( ::Proud::HostID remote, ::Proud::RmiContext& rmiContext , const bool & isExited) PN_SEALED; 
 	virtual bool PlayerExit ( ::Proud::HostID *remotes, int remoteCount, ::Proud::RmiContext &rmiContext, const bool & isExited)   PN_SEALED;  
 static const PNTCHAR* RmiName_PlayerEnter;

@@ -166,15 +166,15 @@ namespace PowerupS2C {
 	{
 	public:
                
-		virtual bool PlayerEnter ( ::Proud::HostID, ::Proud::RmiContext& , const bool & )		{ 
+		virtual bool PlayerEnter ( ::Proud::HostID, ::Proud::RmiContext& , const int & )		{ 
 			return false;
 		} 
 
-#define DECRMI_PowerupS2C_PlayerEnter bool PlayerEnter ( ::Proud::HostID remote, ::Proud::RmiContext& rmiContext , const bool & isEntered) PN_OVERRIDE
+#define DECRMI_PowerupS2C_PlayerEnter bool PlayerEnter ( ::Proud::HostID remote, ::Proud::RmiContext& rmiContext , const int & playerNo) PN_OVERRIDE
 
-#define DEFRMI_PowerupS2C_PlayerEnter(DerivedClass) bool DerivedClass::PlayerEnter ( ::Proud::HostID remote, ::Proud::RmiContext& rmiContext , const bool & isEntered)
-#define CALL_PowerupS2C_PlayerEnter PlayerEnter ( ::Proud::HostID remote, ::Proud::RmiContext& rmiContext , const bool & isEntered)
-#define PARAM_PowerupS2C_PlayerEnter ( ::Proud::HostID remote, ::Proud::RmiContext& rmiContext , const bool & isEntered)
+#define DEFRMI_PowerupS2C_PlayerEnter(DerivedClass) bool DerivedClass::PlayerEnter ( ::Proud::HostID remote, ::Proud::RmiContext& rmiContext , const int & playerNo)
+#define CALL_PowerupS2C_PlayerEnter PlayerEnter ( ::Proud::HostID remote, ::Proud::RmiContext& rmiContext , const int & playerNo)
+#define PARAM_PowerupS2C_PlayerEnter ( ::Proud::HostID remote, ::Proud::RmiContext& rmiContext , const int & playerNo)
                
 		virtual bool PlayerExit ( ::Proud::HostID, ::Proud::RmiContext& , const bool & )		{ 
 			return false;
@@ -200,12 +200,12 @@ namespace PowerupS2C {
 	{
 	public:
                
-		std::function< bool ( ::Proud::HostID, ::Proud::RmiContext& , const bool & ) > PlayerEnter_Function;
-		virtual bool PlayerEnter ( ::Proud::HostID remote, ::Proud::RmiContext& rmiContext , const bool & isEntered) 
+		std::function< bool ( ::Proud::HostID, ::Proud::RmiContext& , const int & ) > PlayerEnter_Function;
+		virtual bool PlayerEnter ( ::Proud::HostID remote, ::Proud::RmiContext& rmiContext , const int & playerNo) 
 		{ 
 			if (PlayerEnter_Function==nullptr) 
 				return true; 
-			return PlayerEnter_Function(remote,rmiContext, isEntered); 
+			return PlayerEnter_Function(remote,rmiContext, playerNo); 
 		}
 
                

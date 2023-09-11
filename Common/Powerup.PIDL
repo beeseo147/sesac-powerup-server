@@ -45,7 +45,7 @@ global PowerupS2G 2000
 
 global PowerupS2C 2100
 {
-	PlayerEnter([in] bool isEntered);
+	PlayerEnter([in] int playerNo);
 	PlayerExit([in] bool isExited);
 	//TODO PlayerListRoom([in] std::vector<Room> rooms);
 }
