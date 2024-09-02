@@ -46,8 +46,9 @@ int main(int argc, char *argv[]) {
     MatchMaker::join_room(remote, groupID);
 
     Room &room = MatchMaker::get_room_joined(remote);
+    int player_no = room.get_player_no(remote);
 
-    g_GameProxyClient.PlayerEnter(remote, RmiContext::ReliableSend, true);
+    g_GameProxyClient.PlayerEnter(remote, RmiContext::ReliableSend, player_no);
     g_GameProxyGroup.PlayersReady(groupID, RmiContext::ReliableSend,
                                   room.get_players_ready());
 

@@ -219,7 +219,7 @@ namespace PowerupS2C {
 
 
         
-	bool Proxy::PlayerEnter ( ::Proud::HostID remote, ::Proud::RmiContext& rmiContext , const bool & isEntered)	{
+	bool Proxy::PlayerEnter ( ::Proud::HostID remote, ::Proud::RmiContext& rmiContext , const int & playerNo)	{
 		::Proud::CMessage __msg;
 __msg.UseInternalBuffer();
 __msg.SetSimplePacketMode(m_core->IsSimplePacketMode());
@@ -227,13 +227,13 @@ __msg.SetSimplePacketMode(m_core->IsSimplePacketMode());
 ::Proud::RmiID __msgid=(::Proud::RmiID)Rmi_PlayerEnter;
 __msg.Write(__msgid); 
 	
-__msg << isEntered;
+__msg << playerNo;
 		
 		return RmiSend(&remote,1,rmiContext,__msg,
 			RmiName_PlayerEnter, (::Proud::RmiID)Rmi_PlayerEnter);
 	}
 
-	bool Proxy::PlayerEnter ( ::Proud::HostID *remotes, int remoteCount, ::Proud::RmiContext &rmiContext, const bool & isEntered)  	{
+	bool Proxy::PlayerEnter ( ::Proud::HostID *remotes, int remoteCount, ::Proud::RmiContext &rmiContext, const int & playerNo)  	{
 		::Proud::CMessage __msg;
 __msg.UseInternalBuffer();
 __msg.SetSimplePacketMode(m_core->IsSimplePacketMode());
@@ -241,7 +241,7 @@ __msg.SetSimplePacketMode(m_core->IsSimplePacketMode());
 ::Proud::RmiID __msgid=(::Proud::RmiID)Rmi_PlayerEnter;
 __msg.Write(__msgid); 
 	
-__msg << isEntered;
+__msg << playerNo;
 		
 		return RmiSend(remotes,remoteCount,rmiContext,__msg,
 			RmiName_PlayerEnter, (::Proud::RmiID)Rmi_PlayerEnter);

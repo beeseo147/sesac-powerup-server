@@ -630,7 +630,7 @@ namespace PowerupS2C {
 			            return true;
 			        }
 			
-					bool isEntered; __msg >> isEntered;
+					int playerNo; __msg >> playerNo;
 					m_core->PostCheckReadMessage(__msg,RmiName_PlayerEnter);
 					
 			
@@ -638,7 +638,7 @@ namespace PowerupS2C {
 					{
 						::Proud::String parameterString;
 						
-						::Proud::AppendTextOut(parameterString,isEntered);	
+						::Proud::AppendTextOut(parameterString,playerNo);	
 						
 						NotifyCallFromStub(remote, (::Proud::RmiID)Rmi_PlayerEnter, 
 							RmiName_PlayerEnter,parameterString);
@@ -670,7 +670,7 @@ namespace PowerupS2C {
 					}
 						
 					// Call this method.
-					bool __ret = PlayerEnter (remote,ctx , isEntered );
+					bool __ret = PlayerEnter (remote,ctx , playerNo );
 						
 					if(__ret==false)
 					{
